@@ -280,6 +280,32 @@ namespace DEMOWebApi.Controllers
 
 
 
+        [HttpGet]
+        public async Task<IEnumerable<ReturnStudentAndMarksViewModel>> GetAllStudentsAndTheirMarksTemp()
+        {
+            try
+            {
+                _logger.LogInformation($"GetAllStudentsAndTheirMarks Request Recived");
+                var result = await _StudentService.GetAllStudentAndTheirMarks();
+                _logger.LogInformation($"GetAllStudentsAndTheirMarks Response Generated ==> {JsonConvert.SerializeObject(result)} ");
+
+                if (result.Count == 0 || result == null)
+                {
+                    return new List<ReturnStudentAndMarksViewModel>();
+                }
+
+                return _mapper.Map<IEnumerable<ReturnStudentAndMarksViewModel>>(result.Records);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception Raised {ex.Message}");
+                return new List<ReturnStudentAndMarksViewModel>();
+            }
+
+        }
+
+
+
         [HttpPost]
         public async Task<Result<string>> AddStudentMarks(AddStudentMarksViewModel StudentMarksViewModel)
         {
